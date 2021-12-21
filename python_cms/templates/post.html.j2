@@ -1,10 +1,16 @@
 {% extends 'base.html.j2' %}
+
 {% block title %} {{ post.title }} {% endblock %}
 
 {% block content %}
   {% if post.id is not defined %}
     <h1>Post not found</h1>
   {% else %}
+  {% if post.author_id == current_user.get_id() %}
+    <button class="btn tooltip delete-btn" data-tooltip="permanently delete this post">
+    <a class="delete-btn2" href="/post/delete/{{ post.id }}"> Delete </a>
+    </button>
+  {% endif %}
   <h1>{{ post.title }}</h1>
   <img src="/files/{{post.teaser_image}}" class="img-responsive article-image-inner" alt="">
   {{ post.body|safe }}

@@ -48,6 +48,17 @@ def create_post():
   return render_template('create_post.html.j2', form=form)
 
 
+@pages_blueprint.route("/post/delete/<string:post_id>",
+                       methods=['GET', 'POST', 'DEL'])
+def del_post(post_id):
+  post = PostModel.get(post_id)
+  if post.author_id == current_user.get_id():
+    PostModel.delete_post(post_id)
+    return redirect(url_for("pages.index"))
+    flash(f'Post with title: {post.title} deleted')
+  return (print(f'You are not authorized to delete this content')), 403
+
+
 @pages_blueprint.route('/files/<path:filename>')
 def uploaded_files(filename):
   path = os.path.join(python_cms.ROOT_PATH, 'files_upload')
@@ -55,6 +66,7 @@ def uploaded_files(filename):
 
 
 @pages_blueprint.route("/post/<string:post_id>")
+@login_required
 def single_post(post_id):
   post = PostModel.get(post_id)
   return render_template('post.html.j2', post=post)

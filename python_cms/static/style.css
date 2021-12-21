@@ -68,3 +68,10 @@ main {
 #createPost {
   margin-top: 20px;
 }
+
+.delete-btn {
+  float: right;
+  background-color: red;
+  color: white;
+  border-color: red;
+}

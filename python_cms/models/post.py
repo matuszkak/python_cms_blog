@@ -28,3 +28,10 @@ class PostModel(BaseModel):
   def save(self):
     db.session.add(self)
     db.session.commit()
+
+  @classmethod
+  def delete_post(cls, post_id):
+    post = PostModel.get(post_id)
+    db.session.delete(post)
+    db.session.commit()
+    return
