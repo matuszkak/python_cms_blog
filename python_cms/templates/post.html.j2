@@ -12,7 +12,11 @@
     </button>
   {% endif %}
   <h1>{{ post.title }}</h1>
+  {% if post.teaser_image == "" %}
+    <img src="{{ url_for('static', filename='default.png') }}" class="img-responsive article-image-inner" alt="">
+  {% else %}
   <img src="/files/{{post.teaser_image}}" class="img-responsive article-image-inner" alt="">
+  {% endif %}
   {{ post.body|safe }}
   {% endif %}
 {% endblock %}
