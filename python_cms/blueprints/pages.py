@@ -24,7 +24,7 @@ def index():
 def about():
   return render_template('about.html.j2')
 
-
+# add post
 @pages_blueprint.route("/add", methods=['GET', 'POST'])
 @login_required
 def create_post():
@@ -51,31 +51,77 @@ def create_post():
 
   return render_template('create_post.html.j2', form=form)
 
-
+# delete post
 @pages_blueprint.route("/post/delete/<string:post_id>",
                        methods=['GET', 'POST', 'DEL'])
 def del_post(post_id):
   post = PostModel.get(post_id)
   if post.author_id == current_user.get_id():
+    flash(f'Post with title: {post.title} deleted')
     PostModel.delete_post(post_id)
     return redirect(url_for("pages.index"))
-    flash(f'Post with title: {post.title} deleted')
+    
+
   return (print(f'You are not authorized to delete this content')), 403
 
+#edit post
+@pages_blueprint.route("/post/edit/<string:post_id>", methods=['GET', 'POST'])
+@login_required
 
+def edit_post(post_id):
+  post = PostModel.get(post_id)
+  if post.author_id == current_user.get_id():
+
+    form = PostForm(title=post.title, teaser_image=post.teaser_image, body=post.body)
+    print(post.teaser_image)
+    
+    if request.method == 'POST' and form.validate_on_submit():
+      unescaped_body = html.unescape(request.form.get('body'))
+      clean_body = bleach.clean(unescaped_body,
+                                tags=bleach.sanitizer.ALLOWED_TAGS +
+                                ['div', 'br', 'p', 'h1', 'h2', 'img', 'h3'],
+                                attributes=['src', 'alt', 'style'])
+      title = request.form.get('title')
+      body = clean_body
+      file = request.files['teaser_image']
+      if file:
+        filename = secure_filename(file.filename)
+        file.save(os.path.join(python_cms.ROOT_PATH, 'files_upload', filename))
+      else:
+        filename = ""
+      
+      
+      
+      new_post = PostModel(title, body, current_user.get_id(), filename)
+      new_post.save()
+      
+      PostModel.delete_post(post_id)
+      
+      flash(f'Post with title: {title} changed') 
+      return redirect(url_for('pages.index'))
+            
+      
+  else:
+    (print(f'You are not authorized to edit this content')), 403 
+  return render_template('create_post.html.j2', edit=True, form=form, post_id=post.id)
+ 
+    
+  
+
+#save uploaded file
 @pages_blueprint.route('/files/<path:filename>')
 def uploaded_files(filename):
   path = os.path.join(python_cms.ROOT_PATH, 'files_upload')
   return send_from_directory(path, filename)
 
-
+#get single post
 @pages_blueprint.route("/post/<string:post_id>")
 @login_required
 def single_post(post_id):
   post = PostModel.get(post_id)
   return render_template('post.html.j2', post=post)
 
-
+#validations during file upload
 @pages_blueprint.route('/upload', methods=['POST'])
 def upload():
   f = request.files.get('upload')

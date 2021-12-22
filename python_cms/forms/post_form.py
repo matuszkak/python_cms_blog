@@ -17,7 +17,7 @@ class PostForm(FlaskForm):
   #     ])
   teaser_image = FileField(
       'Teaser Image',
-      render_kw={"accept": "image/*"},
+    #   render_kw={"accept": "image/*"},
       validators=[FileAllowed(['jpg', 'png'], 'Images only!')])
   body = CKEditorField(
       'Body',
@@ -27,4 +27,5 @@ class PostForm(FlaskForm):
                  message=
                  "Body length must be between %(min)d and %(max)d characters")
       ])
+  
   submit = SubmitField(label=('Create'))

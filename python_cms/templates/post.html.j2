@@ -8,8 +8,12 @@
   {% else %}
   {% if post.author_id == current_user.get_id() %}
     <button class="btn tooltip delete-btn" data-tooltip="permanently delete this post">
-    <a class="delete-btn2" href="/post/delete/{{ post.id }}"> Delete </a>
+    <a href="/post/delete/{{ post.id }}"> Delete </a>
     </button>
+    <button class="btn tooltip edit-btn" data-tooltip="edit this post">
+    <a href="/post/edit/{{ post.id }}"> Edit </a>
+    </button>   
+
   {% endif %}
   <h1>{{ post.title }}</h1>
   {% if post.teaser_image == "" %}
