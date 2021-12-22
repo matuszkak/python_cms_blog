@@ -73,7 +73,7 @@ def edit_post(post_id):
   if post.author_id == current_user.get_id():
 
     form = PostForm(title=post.title, teaser_image=post.teaser_image, body=post.body)
-    print(post.teaser_image)
+    # print(post.teaser_image)
     
     if request.method == 'POST' and form.validate_on_submit():
       unescaped_body = html.unescape(request.form.get('body'))
@@ -83,6 +83,8 @@ def edit_post(post_id):
                                 attributes=['src', 'alt', 'style'])
       title = request.form.get('title')
       body = clean_body
+      
+       
       file = request.files['teaser_image']
       if file:
         filename = secure_filename(file.filename)
@@ -103,7 +105,7 @@ def edit_post(post_id):
       
   else:
     (print(f'You are not authorized to edit this content')), 403 
-  return render_template('create_post.html.j2', edit=True, form=form, post_id=post.id)
+  return render_template('create_post.html.j2', edit=True, form=form, post_id=post.id, teaser_image=post.teaser_image)
  
     
   

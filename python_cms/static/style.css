@@ -82,3 +82,11 @@ main {
   margin-right: 30px;
 }
 
+.delete-img-btn {
+  background-color: red;
+  border-color: red;
+}
+
+.hidden {
+display: none
+}
