@@ -38,13 +38,14 @@ def create_post():
     title = request.form.get('title')
     body = clean_body
     file = request.files['teaser_image']
+    promoted = bool(request.form.get('promoted'))
     if file:
       filename = secure_filename(file.filename)
       file.save(os.path.join(python_cms.ROOT_PATH, 'files_upload', filename))
     else:
       filename = ""
 
-    post = PostModel(title, body, current_user.get_id(), filename)
+    post = PostModel(title, body, current_user.get_id(), filename, promoted)
     post.save()
     flash(f'Post with title: {title} is created')
     return redirect(url_for('pages.create_post'))

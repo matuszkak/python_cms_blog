@@ -68,6 +68,15 @@
  {% else: %}
     {{ form.submit(class="btn btn-primary input-group-btn float-right", id="createPost")}}
  {% endif %}  
+
+  <div class="form-group">
+    <label class="form-switch">
+      <input for="promoted" type="checkbox">
+      <i class="form-icon"></i> {{ form.promoted.label }}
+    </label>
+
+  </div>
+
  </form>
 
  {{ ckeditor.config(name='body') }}

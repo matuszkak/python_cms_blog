@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, TextAreaField
+from wtforms import StringField, SubmitField, TextAreaField, BooleanField
 from wtforms.validators import Length, Required
 from flask_wtf.file import FileField, FileAllowed
 from flask_ckeditor import CKEditorField
@@ -29,3 +29,5 @@ class PostForm(FlaskForm):
       ])
   
   submit = SubmitField(label=('Create'))
+
+  promoted = BooleanField(label="Promoted on front page", default=True)
