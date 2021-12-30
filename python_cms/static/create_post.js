@@ -28,4 +28,6 @@ document.querySelector('#img-del-button').addEventListener('click', event => {
   var element2 = document.getElementById("teaser-image-input");
   element2.classList.remove('hidden')
 
+  document.getElementById("originalTeaserImage").value = ""
+
 });

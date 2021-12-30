@@ -30,4 +30,4 @@ class PostForm(FlaskForm):
   
   submit = SubmitField(label=('Create'))
 
-  promoted = BooleanField(label="Promoted on front page", default=True)
+  promoted = BooleanField(label="Promoted on front page", default="checked")

@@ -90,3 +90,9 @@ main {
 .hidden {
 display: none
 }
+
+.promoted {
+  border-color: blue;
+  border-width: 3px;
+  bord
+}

@@ -41,6 +41,7 @@
  {{ form.csrf_token() }}
 
  <input type="hidden" value="{{ form.teaser_image.data }}" name="original_teaser_image" id="originalTeaserImage">
+ 
  <label for="title"> {{ form.title.label }}</label>
  {{ form.title(class="form-input", placeholder="title")}}
  <label for="teaser_image"> {{ form.teaser_image.label }}</label>
@@ -70,11 +71,10 @@
  {% endif %}  
 
   <div class="form-group">
-    <label class="form-switch">
-      <input for="promoted" type="checkbox">
+    <label class="form-switch"> 
+      <input for= {{ form.promoted }}
       <i class="form-icon"></i> {{ form.promoted.label }}
     </label>
-
   </div>
 
  </form>

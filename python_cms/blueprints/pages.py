@@ -73,7 +73,7 @@ def edit_post(post_id):
   post = PostModel.get(post_id)
   if post.author_id == current_user.get_id():
 
-    form = PostForm(title=post.title, teaser_image=post.teaser_image, body=post.body)
+    form = PostForm(title=post.title, teaser_image=post.teaser_image, body=post.body, promoted=post.promoted)
     # print(post.teaser_image)
     
     if request.method == 'POST' and form.validate_on_submit():
@@ -85,17 +85,19 @@ def edit_post(post_id):
       title = request.form.get('title')
       body = clean_body
       
-       
       file = request.files['teaser_image']
+      
       if file:
         filename = secure_filename(file.filename)
         file.save(os.path.join(python_cms.ROOT_PATH, 'files_upload', filename))
       else:
-        filename = ""
+        filename = request.form.get('original_teaser_image')
       
+      print(f'filenév: {filename}')
+           
+      promoted = bool(request.form.get('promoted'))
       
-      
-      new_post = PostModel(title, body, current_user.get_id(), filename)
+      new_post = PostModel(title, body, current_user.get_id(), filename, promoted)
       new_post.save()
       
       PostModel.delete_post(post_id)
