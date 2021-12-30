@@ -5,6 +5,7 @@ from werkzeug.utils import secure_filename, redirect
 import os
 from python_cms.models.post import PostModel
 from python_cms.forms.post_form import PostForm
+from python_cms.models.category import CategoryModel
 import python_cms
 import html
 from flask_ckeditor import upload_success, upload_fail
@@ -29,6 +30,9 @@ def about():
 @login_required
 def create_post():
   form = PostForm()
+
+  form.category.choices = [(1, "Sports"), (2, "Travel"), (3, "Music"), (4, "Food")]
+
   if request.method == 'POST' and form.validate_on_submit():
     unescaped_body = html.unescape(request.form.get('body'))
     clean_body = bleach.clean(unescaped_body,
@@ -45,7 +49,9 @@ def create_post():
     else:
       filename = ""
 
-    post = PostModel(title, body, current_user.get_id(), filename, promoted)
+    category = CategoryModel.get(request.form.get('category'))
+
+    post = PostModel(title, body, current_user.get_id(), filename, promoted, category)
     post.save()
     flash(f'Post with title: {title} is created')
     return redirect(url_for('pages.create_post'))
@@ -73,7 +79,8 @@ def edit_post(post_id):
   post = PostModel.get(post_id)
   if post.author_id == current_user.get_id():
 
-    form = PostForm(title=post.title, teaser_image=post.teaser_image, body=post.body, promoted=post.promoted)
+    form = PostForm(title=post.title, teaser_image=post.teaser_image, body=post.body, promoted=post.promoted, category=post.category_id)
+    form.category.choices = [(1, "Sports"), (2, "Travel"), (3, "Music"), (4, "Food")]
     # print(post.teaser_image)
     
     if request.method == 'POST' and form.validate_on_submit():
@@ -96,8 +103,9 @@ def edit_post(post_id):
       print(f'filenév: {filename}')
            
       promoted = bool(request.form.get('promoted'))
-      
-      new_post = PostModel(title, body, current_user.get_id(), filename, promoted)
+      category = CategoryModel.get(request.form.get('category'))
+
+      new_post = PostModel(title, body, current_user.get_id(), filename, promoted, category)
       new_post.save()
       
       PostModel.delete_post(post_id)

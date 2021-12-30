@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, TextAreaField, BooleanField
+from wtforms import StringField, SubmitField, TextAreaField, BooleanField, RadioField
 from wtforms.validators import Length, Required
 from flask_wtf.file import FileField, FileAllowed
 from flask_ckeditor import CKEditorField
@@ -28,6 +28,8 @@ class PostForm(FlaskForm):
                  "Body length must be between %(min)d and %(max)d characters")
       ])
   
+  category = RadioField()
+
   submit = SubmitField(label=('Create'))
 
   promoted = BooleanField(label="Promoted on front page", default="checked")
